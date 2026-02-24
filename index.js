@@ -1,5 +1,5 @@
 import { addFavorite, getFavorites, removeFavorite } from "./favorites.js";
-
+import { fetchBooks } from "./fetchBooks.js";
 // Select all "Add to Favorites" buttons
 const buttons = document.querySelectorAll(".add-to-favorites");
 
@@ -46,4 +46,47 @@ if (favoritesContainer) {
       favoritesContainer.appendChild(div);
     });
   }
+}
+
+const booksContainer = document.querySelector("#books-container");
+
+async function displayBooks(query) {
+  booksContainer.innerHTML = "<p class='text-center'>Loading...</p>";
+
+  const books = await fetchBooks(query);
+
+  if (books.length === 0) {
+    booksContainer.innerHTML = "<p class='text-center text-red-500'>No results found.</p>";
+    return;
+  }
+
+  booksContainer.innerHTML = "";
+
+  books.forEach(book => {
+    const bookCard = document.createElement("div");
+    bookCard.className = "book-card bg-white shadow rounded p-4";
+
+    const coverId = book.cover_i
+      ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+      : "https://via.placeholder.com/150";
+
+    bookCard.innerHTML = `
+      <div class="h-64 overflow-hidden rounded">
+        <img src="${coverId}" class="w-full h-full object-cover" />
+      </div>
+      <h4 class="book-title font-bold mt-2">${book.title}</h4>
+      <p class="book-author text-sm text-gray-600">
+        Author: ${book.author_name ? book.author_name[0] : "Unknown"}
+      </p>
+      <button class="add-to-favorites bg-blue-600 text-white px-3 py-1 rounded mt-2">
+        Add to Favorites
+      </button>
+    `;
+
+    booksContainer.appendChild(bookCard);
+  });
+}
+
+if (booksContainer) {
+  displayBooks("programming");
 }
