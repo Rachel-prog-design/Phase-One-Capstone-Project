@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4 shadow sticky top-0 z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">📚 Book Explorer</h1>
+      <div class="space-x-4 ">
+        <a href="index.html" class="hover:text-green-500">Home</a>
+        <a href="favorites.html" class="hover:text-green-500">Favorites</a>
+        <a href="about.html" class="hover:text-green-500">About</a>
+      </div>
+    </div>
+  </nav>
+  <br>
+<div class="max-w-6xl mx-auto bg-white shadow rounded p-6 justify-center">
+  
+    <h1 class="text-3xl font-bold mb-4">About My Book App</h1>
+
+    <p class="mb-4 text-gray-700">
+      Welcome to <strong>My Book App</strong>! This app lets users explore books and save their favorites 
+      in a personal list. It's designed to make finding, saving, and revisiting books easy and fun.
+    </p>
+
+    <p class="mb-4 text-gray-700">
+      <strong>Features:</strong>
+      <ul class="list-disc list-inside">
+        <li>Browse a selection of curated books</li>
+        <li>Add books to your Favorites page with a single click</li>
+        <li>Remove books from Favorites whenever you like</li>
+        <li>Favorites are saved even if you refresh the page</li>
+      </ul>
+    </p><br>
+
+    <div class="mb-6 p-4 bg-blue-50 rounded">
+      <h2 class="text-2xl font-bold mb-3 text-blue-600">Our Mission</h2>
+      <p class="text-gray-700">
+        Our mission is to make literature accessible to everyone by providing a simple, user-friendly platform 
+        where readers can discover, explore, and curate their personal book collections. We believe that reading 
+        enriches lives and we are committed to fostering a love of books in our community.
+      </p>
+    </div>
+
+    <div class="mb-6 p-4 bg-green-50 rounded">
+      <h2 class="text-2xl font-bold mb-3 text-green-600">Our Vision</h2>
+      <p class="text-gray-700">
+        We envision a world where every person has access to a diverse range of books and the tools to build 
+        their own literary journey. We strive to create a vibrant community of readers who inspire each other 
+        to explore new worlds, ideas, and perspectives through the power of reading.
+      </p>
+    </div>
+
+<div class="mt-8 p-6 flex gap-6">
+
+    <!-- Left Side: Google Map -->
+    <div class="w-1/2">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15950.175279880497!2d30.060194469599935!3d-1.9347493536627642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca6bad0e6e8f1%3A0xaefc53eb751c9253!2sKigali%20Public%20Library!5e0!3m2!1sen!2srw!4v1771926275836!5m2!1sen!2srw" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <!-- Right Side: Contact Form -->
+    <div class="w-1/2 bg-white shadow rounded p-6">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">Contact Us</h2>
+      <form class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Name</label>
+          <input type="text" placeholder="Your Name" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" required>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Email</label>
+          <input type="email" placeholder="Your Email" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" required>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Message</label>
+          <textarea placeholder="Your Message" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" required></textarea>
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 rounded hover:bg-blue-700">Send Message</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+ <!-- Footer -->
+  <footer class="bg-blue-600 text-white text-center p-4">
+    © 2026 Book Explorer | Built by Rachel | Frontend Developer
+  </footer>
+</body>
+</html>
