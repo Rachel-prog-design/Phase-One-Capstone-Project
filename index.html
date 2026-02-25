@@ -6,6 +6,7 @@
     <title>Phase One Capstone Project</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="index.js"></script>
+    <script src="favorites.js"></script>
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
@@ -27,17 +28,18 @@
   <section class="text-center py-16 bg-white">
     <h2 class="text-4xl font-bold mb-4">Discover Your Next Favorite Book</h2>
     <p class="text-gray-600 mb-6">Search and explore thousands of books online.</p>
-    <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-      Start Exploring
-    </button>
-  </section>
 
-<div class="flex justify-center mb-6 p-6">
+    <div class="flex justify-center mb-6 p-6">
     <form class="w-full max-w-md flex" action="#" onsubmit="return false;">
       <input id="search-input" type="text" placeholder="Search books..." class="flex-1 px-4 py-2 rounded-l border border-gray-300 focus:outline-none" />
       <button id="search-btn" class="bg-green-500 text-white px-4 py-2 rounded-r hover:bg-green-600">Search</button>
     </form>
   </div>
+  <br>
+    <button class="add-to-favorites bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+      Start Exploring
+    </button>
+  </section>
 
   <!-- Books Grid Placeholder -->
   <main class="container mx-auto p-6 flex-grow">
@@ -54,9 +56,14 @@
          class="w-full h-full object-cover">
   </div>
   <h4 class="font-bold book-title"> Between Dreams and Reality </h4>
-  <p class="text-sm text-gray-600">Author: Rachel Nyinawabana</p> <br>
-  <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4 w-full">Add to Favorites</button>
-  </div>
+  <p class="text-sm text-gray-600">Author: Rachel Nyinawabana</p> <br> <br>
+ <button class="add-to-favorites bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4 w-full"
+        data-title="Between Dreams and Reality"
+        data-author="Rachel Nyinawabana"
+        data-cover="1.webp">
+  Add to Favorites
+ </button>
+ </div>
 
   <!-- Book Card 2 -->
   <div class="book-card bg-white shadow rounded p-4">
