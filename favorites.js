@@ -1,115 +1,89 @@
-// favorites.js
+document.addEventListener("DOMContentLoaded", () => {
 
-// Get favorites from localStorage
-export function getFavorites() {
-  return JSON.parse(localStorage.getItem("favorites")) || [];
-}
+  // ===== ADD TO FAVORITES BUTTONS ON INDEX.HTML =====
+  const favoriteButtons = document.querySelectorAll(".book-card button");
 
-// Save favorites to localStorage
-function saveFavorites(favorites) {
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-}
+  favoriteButtons.forEach(button => {
+    const card = button.closest(".book-card");
+    const title = card.querySelector("h4").textContent.trim();
 
-// Add book to favorites
-export function addFavorite(book) {
-  const favorites = getFavorites();
-  favorites.push(book);
-  saveFavorites(favorites);
-}
+    // If book is already in favorites, mark as saved
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    if (favorites.some(book => book.title === title)) {
+      button.textContent = "✅ Saved";
+      button.disabled = true;
+    }
 
-// Remove book from favorites
-export function removeFavorite(title) {
-  let favorites = getFavorites();
-  favorites = favorites.filter(book => book.title !== title);
-  saveFavorites(favorites);
-}
-// DOM Elements
-const booksList = document.querySelector("#books-list");
+    button.addEventListener("click", () => {
+      const author = card.querySelector("p").textContent.replace("Author: ", "").trim();
+      const imgSrc = card.querySelector("img").src;
 
-// Load favorites from localStorage
-function getFavorites() {
-  const favorites = localStorage.getItem("favorites");
-  return favorites ? JSON.parse(favorites) : [];
-}
+      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      if (!favorites.some(book => book.title === title)) {
+        favorites.push({ title, author, imgSrc });
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+      }
 
-// Save favorites to localStorage
-function saveFavorites(favorites) {
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-}
-
-// Display favorites on the page
-function displayFavorites(favorites) {
-  booksList.innerHTML = "";
-
-  if (favorites.length === 0) {
-    booksList.innerHTML = `
-      <p class="text-center text-red-500 col-span-full">No favorite books yet.</p>
-    `;
-    return;
-  }
-
-  favorites.forEach((book, index) => {
-    const bookCard = document.createElement("div");
-    bookCard.className = "bg-white shadow rounded p-4";
-
-    bookCard.innerHTML = `
-      <div class="h-64 overflow-hidden rounded mb-4">
-        <img src="${book.cover || 'https://via.placeholder.com/150'}" alt="${book.title}" class="w-full h-full object-cover" />
-      </div>
-      <h4 class="font-bold">${book.title}</h4>
-      <p class="text-sm text-gray-600">by: ${book.author}</p>
-      <button class="remove-favorite bg-red-600 text-white px-3 py-1 rounded mt-2 hover:bg-red-700" data-index="${index}">
-        Remove from Favorites
-      </button>
-    `;
-
-    booksList.appendChild(bookCard);
-  });
-
-  // Add event listeners for Remove buttons
-  document.querySelectorAll(".remove-favorite").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const idx = e.target.dataset.index;
-      favorites.splice(idx, 1);
-      saveFavorites(favorites);
-      displayFavorites(favorites);
+      // Change button to saved
+      button.textContent = "✅ Saved";
+      button.disabled = true;
     });
   });
-}
 
-// Initial display
-let favorites = getFavorites();
-displayFavorites(favorites);
+  // ===== DISPLAY FAVORITES ON favorites.html =====
+  const favoritesContainer = document.getElementById("favorites-container");
+  if (favoritesContainer) {
+    // Show loading first
+    favoritesContainer.innerHTML = "<p class='text-center text-gray-600'>Loading favorites...</p>";
 
+    // Wait 3 seconds before displaying favorites
+    setTimeout(() => {
+      renderFavorites();
+    }, 3000); // 3000ms = 3 seconds
+  }
 
-// Search Functionality
+  function renderFavorites() {
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    favoritesContainer.innerHTML = "";
 
-// Create a search input above the books list dynamically
-const searchContainer = document.createElement("div");
-searchContainer.className = "flex justify-center mb-6 gap-2";
+    if (favorites.length === 0) {
+      favoritesContainer.innerHTML = "<p class='text-center text-gray-600'>No favorite books yet.</p>";
+      return;
+    }
 
-searchContainer.innerHTML = `
-  <input type="text" id="favorites-search" placeholder="Search favorite books..." class="border p-2 rounded w-64" />
-  <button id="favorites-search-btn" class="bg-blue-600 text-white px-4 py-2 rounded">Search</button>
-`;
+    favorites.forEach((book, index) => {
+      const bookDiv = document.createElement("div");
+      bookDiv.classList.add("book-card", "bg-white", "shadow", "rounded", "p-4");
 
-booksList.parentNode.insertBefore(searchContainer, booksList);
+      bookDiv.innerHTML = `
+        <div class="h-64 overflow-hidden rounded mb-2">
+          <img src="${book.imgSrc}" alt="${book.title}" class="w-full h-full object-cover">
+        </div>
+        <h4 class="font-bold">${book.title}</h4>
+        <p class="text-sm text-gray-600">${book.author}</p>
+        <button class="mt-2 w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-500 transition remove-btn" data-index="${index}">
+          Remove from Favorites
+        </button>
+      `;
 
-// Search button event
-const searchInput = document.querySelector("#favorites-search");
-const searchBtn = document.querySelector("#favorites-search-btn");
+      favoritesContainer.appendChild(bookDiv);
+    });
 
-searchBtn.addEventListener("click", () => {
-  const query = searchInput.value.toLowerCase().trim();
+    // Remove functionality
+    const removeButtons = favoritesContainer.querySelectorAll(".remove-btn");
+    removeButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const index = parseInt(btn.getAttribute("data-index"));
+        removeFavorite(index);
+      });
+    });
+  }
 
-  const filtered = favorites.filter(book => 
-    book.title.toLowerCase().includes(query) ||
-    book.author.toLowerCase().includes(query)
-  );
+  function removeFavorite(index) {
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    favorites.splice(index, 1);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    renderFavorites(); // refresh the list
+  }
 
-  displayFavorites(filtered);
 });
-localStorage.setItem("favorites", JSON.stringify([
-  { title: "Book 1", author: "Author A", cover: "1.webp" },
-  { title: "Book 2", author: "Author B", cover: "2.jfif" }
-]));
