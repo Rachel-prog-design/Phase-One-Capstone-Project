@@ -29,6 +29,13 @@
 <main>
   <h1 class="text-2xl font-bold mb-6 justify-between text-center"> <p>Books Library</p></h1>
 
+  <div class="flex justify-center mb-6">
+    <form class="w-full max-w-md flex" action="#" onsubmit="return false;">
+      <input id="search-input" type="text" placeholder="Search books..." class="flex-1 px-4 py-2 rounded-l border border-gray-300 focus:outline-none" />
+      <button id="search-btn" class="bg-green-500 text-white px-4 py-2 rounded-r hover:bg-green-600">Search</button>
+    </form>
+  </div>
+
   <div id="books-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
     <!-- Book 1 -->
