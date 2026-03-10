@@ -2,89 +2,99 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchInput = document.getElementById("search-input");
   const searchBtn = document.getElementById("search-btn");
-  const bookCards = document.querySelectorAll(".book-card");
+  const grid = document.querySelector(".grid");
 
-  // Search button click
-  searchBtn.addEventListener("click", function () {
+  searchBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
 
-    const searchValue = searchInput.value.toLowerCase().trim();
+    const query = searchInput.value.trim();
 
-    bookCards.forEach(card => {
-
-      const title = card.querySelector("h4").textContent.toLowerCase();
-
-      if (title.includes(searchValue)) {
-        card.style.display = "block";   // show matching book
-      } else {
-        card.style.display = "none";    // hide non-matching book
-      }
-
-    });
-
-  });
-
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const menuBtn = document.getElementById("menu-btn");
-  const menu = document.getElementById("menu");
-
-  menuBtn.addEventListener("click", () => {
-    menu.classList.toggle("hidden");
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  const searchInput = document.getElementById("search-input");
-  const searchBtn = document.getElementById("search-btn");
-  const allBookCards = Array.from(document.querySelectorAll(".book-card"));
-  const allGrids = document.querySelectorAll(".grid");
-
-  searchBtn.addEventListener("click", (e) => {
-
-    e.preventDefault(); // stop form refresh
-
-    const query = searchInput.value.trim().toLowerCase();
+    if (!query) {
+      alert("Please enter a book name");
+      return;
+    }
 
     // Show loading message
-    allGrids.forEach(grid => {
-      grid.innerHTML = `
-        <p class="text-center text-gray-600 col-span-full">
-          Searching books...
-        </p>
-      `;
-    });
+    grid.innerHTML = `
+      <p class="text-center text-gray-600 col-span-full">
+        Searching books...
+      </p>
+    `;
 
-    // Wait 3 seconds
-    setTimeout(() => {
+    try {
 
-      const matchedBooks = allBookCards.filter(card => {
-        const title = card.querySelector("h4")?.textContent.toLowerCase();
-        const author = card.querySelector("p")?.textContent.toLowerCase();
-        return title.includes(query) || author.includes(query);
-      });
+      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
 
-      // Clear all grids
-      allGrids.forEach(grid => grid.innerHTML = "");
+      const data = await response.json();
 
-      if (matchedBooks.length === 0) {
-        if (allGrids.length > 0) {
-          allGrids[0].innerHTML = `
-            <p class="text-center text-gray-600 col-span-full">
-              No books found.
-            </p>
-          `;
-        }
+      grid.innerHTML = "";
+
+      if (!data.items) {
+        grid.innerHTML = `
+          <p class="text-center text-gray-600 col-span-full">
+            No books found.
+          </p>
+        `;
         return;
       }
 
-      // Show matched books
-      matchedBooks.forEach(card => {
-        allGrids[0].appendChild(card);
+      data.items.forEach(book => {
+
+        const title = book.volumeInfo.title || "No Title";
+        const author = book.volumeInfo.authors?.[0] || "Unknown Author";
+        const img = book.volumeInfo.imageLinks?.thumbnail || "";
+
+        const bookDiv = document.createElement("div");
+        bookDiv.className = "book-card bg-white shadow rounded p-4";
+
+        bookDiv.innerHTML = `
+          <div class="h-64 overflow-hidden rounded mb-2">
+            <img src="${img}" alt="${title}" class="w-full h-full object-cover">
+          </div>
+          <h4 class="font-bold">${title}</h4>
+          <p class="text-sm text-gray-600">${author}</p>
+          <button class="mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+            Add to Favorites
+          </button>
+        `;
+
+        grid.appendChild(bookDiv);
+
       });
 
-    }, 3000);
+    } catch (error) {
+
+      grid.innerHTML = `
+        <p class="text-center text-red-600 col-span-full">
+          Error loading books. Please try again.
+        </p>
+      `;
+
+      console.error(error);
+    }
+
+  });
+
+  // ADD TO FAVORITES
+  document.addEventListener("click", (e) => {
+
+    if(e.target.classList.contains("add-fav")){
+
+      const title = e.target.dataset.title;
+      const author = e.target.dataset.author;
+      const img = e.target.dataset.img;
+
+      const book = {title, author, img};
+
+      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+      favorites.push(book);
+
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+
+      alert("Book added to favorites!");
+
+    }
 
   });
 
