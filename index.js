@@ -53,7 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <h4 class="font-bold">${title}</h4>
           <p class="text-sm text-gray-600">${author}</p>
-          <button class="mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+         <button 
+           class="add-fav mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            data-title="${title}"
+            data-author="${author}"
+            data-img="${img}">
             Add to Favorites
           </button>
         `;
@@ -66,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       grid.innerHTML = `
         <p class="text-center text-red-600 col-span-full">
-          Error loading books. Please try again.
+          Please check your internet connection.
         </p>
       `;
 
@@ -88,12 +92,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-      favorites.push(book);
+      if(!favorites.some(f => f.title === title)){
+  favorites.push(book);
+  localStorage.setItem("favorites", JSON.stringify(favorites));
 
-      localStorage.setItem("favorites", JSON.stringify(favorites));
+  // Change button appearance
+  e.target.textContent = "✅ Saved";
+  e.target.disabled = true;
+  e.target.classList.remove("bg-blue-600", "hover:bg-blue-700");
+  e.target.classList.add("bg-green-600");
 
-      alert("Book added to favorites!");
-
+}
     }
 
   });
