@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       grid.innerHTML = `
         <p class="text-center text-red-600 col-span-full">
-          Error loading books. Please try again.
+          Please check your internet connection.
         </p>
       `;
 
