@@ -92,12 +92,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-      favorites.push(book);
+      if(!favorites.some(f => f.title === title)){
+  favorites.push(book);
+  localStorage.setItem("favorites", JSON.stringify(favorites));
 
-      localStorage.setItem("favorites", JSON.stringify(favorites));
+  // Change button appearance
+  e.target.textContent = "✅ Saved";
+  e.target.disabled = true;
+  e.target.classList.remove("bg-blue-600", "hover:bg-blue-700");
+  e.target.classList.add("bg-green-600");
 
-      alert("Book added to favorites!");
-
+}
     }
 
   });
