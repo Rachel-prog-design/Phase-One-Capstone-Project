@@ -53,7 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <h4 class="font-bold">${title}</h4>
           <p class="text-sm text-gray-600">${author}</p>
-          <button class="mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+         <button 
+           class="add-fav mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            data-title="${title}"
+            data-author="${author}"
+            data-img="${img}">
             Add to Favorites
           </button>
         `;
